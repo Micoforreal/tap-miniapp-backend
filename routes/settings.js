@@ -5,7 +5,7 @@ const rateLimit = require('express-rate-limit');
 const router = express.Router();
 const Settings = require('../mongoose/models/Setting');
 const { authenticateToken } = require('../middleware/auth');
-const logger = require('../utils/logger'); // Custom logger
+const logger = require('../middleware/logger'); // Custom logger
 
 // Rate limiting for support contact endpoint
 const contactSupportLimiter = rateLimit({

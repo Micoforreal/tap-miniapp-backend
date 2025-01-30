@@ -54,10 +54,6 @@ router.post('/init', async (req, res) => {
 
     try {
       const { telegramId } = req.body;
-
-      // const response = await getUserInfo(telegramId);
-      // console.log(response)
-      
       let user = await User.findOne({ telegramId });
       
       if (!user) {
