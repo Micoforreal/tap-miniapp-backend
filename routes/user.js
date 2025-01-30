@@ -28,7 +28,7 @@ const getProfileUrl = async (telegramId) => {
     const response = await axios.get(url);
 
 
-    console.log(response.data)
+
     // Check if the response is successful
     if (response.data && response.data.result && response.data.result.photos.length > 0) {
       const fileId = response.data.result.photos[0][0].file_id;
@@ -64,8 +64,6 @@ router.post('/init', async (req, res) => {
         });
       }
 
-// MONGODB_URI=mongodb+srv://tapGame22:OVJlv6A1zK40NUo4@cluster0.gfxdn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-// JWT_SECRET="j0jwe0jej0ijoij"
       const token = jwt.sign({ telegramId }, process.env.JWT_SECRET);
       const profileUrl = await getProfileUrl(telegramId)
       
