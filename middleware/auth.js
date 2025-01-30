@@ -55,8 +55,9 @@ const authenticateUser = async (req, res, next) => {
       });
     }
 
-    const user = await User.findOne({ telegramId: decoded.telegramId },{telegramId})
-  // Convert to plain JavaScript object for better performance
+    const user = await User.findOne({ telegramId: decoded.telegramId })
+      .select('-password')  // Exclude sensitive data
+   // Convert to plain JavaScript object for better performance
 
     if (!user) {
       return res.status(404).json({
