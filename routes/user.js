@@ -128,8 +128,9 @@ router.post('/tap', authenticateUser, async (req, res) => {
   
       res.json({
         rewards: {
-          coins: coinReward,
+          coins: tapCount,
           experience: experienceReward
+
         },
         user: {
           coins: user.coins,
