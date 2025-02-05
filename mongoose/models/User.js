@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
+  firstName: {type:String, required:true},
+  lastName: {type:String},
     telegramId: { type: String, required: true, unique: true },
+    profilePic:{type:String},
     coins: { type: Number, default: 500 },
     tickets: { type: Number, default: 0 },
     keys: { type: Number, default: 2 },
