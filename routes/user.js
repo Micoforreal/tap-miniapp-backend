@@ -14,14 +14,31 @@ const axios = require("axios");
 
 
 
+const botToken = '7635121657:AAGUq8flSMrIx2p5mMOXBPmLNmePP2j7nJQ'; // Replace with your bot's token
+
+const getUserName = async (telegramId)=>{
+  const url = `https://api.telegram.org/bot${botToken}/getChat?chat_id=${telegramId}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.ok) {
+      const { first_name, last_name} = data.result;
+      return ({first_name, last_name}) 
+    } else {
+      throw new Error('Unable to fetch user info.');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    return 'Unknown User';
+  }
 
 
+}
 
 const getProfileUrl = async (telegramId) => {
-  const botToken = '7635121657:AAGUq8flSMrIx2p5mMOXBPmLNmePP2j7nJQ'; // Replace with your bot's token
   const url = `https://api.telegram.org/bot${botToken}/getUserProfilePhotos?user_id=${telegramId}`;
-
-  // https://api.telegram.org/bot${/getUserProfilePhotos?user_id=7778611573
 
   try {
     // Send request to get user info by Telegram ID
@@ -56,16 +73,20 @@ router.post('/init', async (req, res) => {
       const { telegramId } = req.body;
       let user = await User.findOne({ telegramId });
       
+      const profileUrl = await getProfileUrl(telegramId)
+      const {first_name , last_name} = await getUserName(telegramId)
       if (!user) {
         user = await User.create({
+          firstName:first_name,
+          lastName:last_name,
           telegramId:telegramId,
+          profilePic:profileUrl?profileUrl:null,
           lastTapTime: new Date(0),
           lastDailyReward: new Date(0)
         });
       }
 
       const token = jwt.sign({ telegramId }, process.env.JWT_SECRET);
-      const profileUrl = await getProfileUrl(telegramId)
       
       res.json({
         token,
@@ -75,7 +96,9 @@ router.post('/init', async (req, res) => {
           keys: user.keys,
           rank: user.rank,
           experience: user.experience,
-          profileUrl: profileUrl?profileUrl:null
+          profileUrl: profileUrl?profileUrl:null,
+          firstName:first_name,
+          lastName:last_name
         }
       });
     } catch (error) {
