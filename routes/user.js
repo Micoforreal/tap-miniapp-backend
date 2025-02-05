@@ -97,8 +97,8 @@ router.post('/init', async (req, res) => {
           rank: user.rank,
           experience: user.experience,
           profileUrl: profileUrl?profileUrl:null,
-          firstName:first_name,
-          lastName:last_name
+          firstName:user.firstName,
+          lastName:user.lastName
         }
       });
     } catch (error) {
