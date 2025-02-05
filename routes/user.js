@@ -14,7 +14,7 @@ const axios = require("axios");
 
 
 
-const botToken = '7635121657:AAGUq8flSMrIx2p5mMOXBPmLNmePP2j7nJQ'; // Replace with your bot's token
+const botToken = '7690253021:AAECH7uTJYYoG7pcGuz13WA82A0McZ-mRio'; // Replace with your bot's token
 
 const getUserName = async (telegramId)=>{
   const url = `https://api.telegram.org/bot${botToken}/getChat?chat_id=${telegramId}`;
