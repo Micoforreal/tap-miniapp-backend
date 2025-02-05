@@ -39,12 +39,9 @@ const getUserName = async (telegramId)=>{
 
 const getProfileUrl = async (telegramId) => {
   const url = `https://api.telegram.org/bot${botToken}/getUserProfilePhotos?user_id=${telegramId}`;
-
   try {
     // Send request to get user info by Telegram ID
     const response = await axios.get(url);
-
-
 
     // Check if the response is successful
     if (response.data && response.data.result && response.data.result.photos.length > 0) {
