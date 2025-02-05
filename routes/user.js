@@ -96,7 +96,7 @@ router.post('/init', async (req, res) => {
           keys: user.keys,
           rank: user.rank,
           experience: user.experience,
-          profileUrl: profileUrl?profileUrl:null,
+          profileUrl: user.profilePic,
           firstName:user.firstName,
           lastName:user.lastName
         }
