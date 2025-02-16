@@ -38,11 +38,10 @@ bot.start((ctx) =>
     })
   );
   
-  const WEBHOOK_URL = `https://${process.env.RENDER_EXTERNAL_URL}/webhook/${TOKEN}`;
-  bot.telegram.setWebhook(WEBHOOK_URL);
+  bot.launch();
 
 
-app.use(bot.webhookCallback(`/webhook/${TOKEN}`));
+
 
 // Connect to MongoDB and start server
 mongoose.connect(process.env.MONGODB_URI)
