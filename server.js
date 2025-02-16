@@ -38,15 +38,16 @@ bot.start((ctx) =>
     })
   );
   
-  bot.launch();
+  const WEBHOOK_URL = `https://${process.env.RENDER_EXTERNAL_URL}/webhook/${TOKEN}`;
+  bot.telegram.setWebhook(WEBHOOK_URL);
 
 
-
+app.use(bot.webhookCallback(`/webhook/${TOKEN}`));
 
 // Connect to MongoDB and start server
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
-    app.listen(process.env.PORT || 8000, () => {
+    app.listen(process.env.PORT || 10000, () => {
       console.log(`Server running on port ${process.env.PORT || 3000}`);
     });
   })
