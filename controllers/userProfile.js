@@ -1,7 +1,7 @@
 const express = require('express')
 const axios = require("axios");
 
-const botToken = '7690253021:AAECH7uTJYYoG7pcGuz13WA82A0McZ-mRio'; // Replace with your bot's tokn
+const botToken = process.env.BOT_TOKEN // Replace with your bot's tokn
 
 
 const  getProfileUrl = async (telegramId) => {

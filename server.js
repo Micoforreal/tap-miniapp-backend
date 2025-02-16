@@ -7,8 +7,12 @@ const userRoutes = require("./routes/user")
 const settingRoutes = require("./routes/settings")
 const leaderboardRoutes = require("./routes/leaderBoard");
 const { logger } = require('./middleware/logger');
+const { Telegraf } = require('telegraf');
 const app = express();
+const web_link = process.env.WEB_LINK
+const TOKEN = process.env.BOT_TOKEN
 
+const bot = new Telegraf(TOKEN)
 // Middleware
 app.use(logger)
 app.use(cors());
@@ -21,6 +25,20 @@ app.use('/api/setting',settingRoutes)
 app.use('/api/leaderboard',leaderboardRoutes)
 
 
+
+
+
+
+bot.start((ctx) =>
+    ctx.reply("Welcome :)))))", {
+      reply_markup: {
+        inline_keyboard: [[{ text: "web app", web_app: { url: web_link } }]],
+        
+    },
+    })
+  );
+  
+  bot.launch();
 
 
 
