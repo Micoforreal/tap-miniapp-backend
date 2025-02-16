@@ -8,13 +8,16 @@ require('dotenv').config();
 
 const User = require("../mongoose/models/User");
 const { authenticateUser, authenticateToken } = require('../middleware/auth');
-
 const axios = require("axios");
+const {OpenAI}= require("openai");
+const { getProfileUrl } = require('../controllers/userProfile');
+const openai = new OpenAI({
+  baseURL:'https://api.deepseek.com',
+  apiKey: "sk-79bf9e05c0cd418ea2f4bb93cf35aa36", // Replace with your actual API key
+});
 
 
-
-
-const botToken = '7690253021:AAECH7uTJYYoG7pcGuz13WA82A0McZ-mRio'; // Replace with your bot's token
+const botToken = '7690253021:AAECH7uTJYYoG7pcGuz13WA82A0McZ-mRio'; // Replace with your bot's tokn
 
 const getUserName = async (telegramId)=>{
   const url = `https://api.telegram.org/bot${botToken}/getChat?chat_id=${telegramId}`;
@@ -37,31 +40,6 @@ const getUserName = async (telegramId)=>{
 
 }
 
-const getProfileUrl = async (telegramId) => {
-  const url = `https://api.telegram.org/bot${botToken}/getUserProfilePhotos?user_id=${telegramId}`;
-  try {
-    // Send request to get user info by Telegram ID
-    const response = await axios.get(url);
-
-    // Check if the response is successful
-    if (response.data && response.data.result && response.data.result.photos.length > 0) {
-      const fileId = response.data.result.photos[0][0].file_id;
-      // Get the file path for the profile photo
-      const fileResponse = await axios.get(`https://api.telegram.org/bot${botToken}/getFile?file_id=${fileId}`);
-
-      if (fileResponse.data && fileResponse.data.result) {
-        return `https://api.telegram.org/file/bot${botToken}/${fileResponse.data.result.file_path}`;
-      } else {
-        console.error('Failed to fetch file path');
-      }
-    } else {
-      console.error('Failed to fetch user profile photos');
-    }
-  } catch (error) {
-    console.error('Error fetching user info:', error);
-  }
-};
-
 
 // Initialize or get user
 router.post('/init', async (req, res) => {
@@ -77,7 +55,6 @@ router.post('/init', async (req, res) => {
           firstName:first_name,
           lastName:last_name,
           telegramId:telegramId,
-          profilePic:profileUrl?profileUrl:null,
           lastTapTime: new Date(0),
           lastDailyReward: new Date(0)
         });
@@ -93,7 +70,7 @@ router.post('/init', async (req, res) => {
           keys: user.keys,
           rank: user.rank,
           experience: user.experience,
-          profileUrl: user.profilePic,
+          profilePic:profileUrl?profileUrl:null,
           firstName:user.firstName,
           lastName:user.lastName
         }
@@ -232,5 +209,29 @@ router.get('/stats', authenticateUser, async (req, res) => {
   });
   
   
+
+  router.get("/generate-image", async (req,res) => {
+    const {prompt}= req.body
+   
+    try {
+      const response = await openai.images.generate({
+        model: "dall-e-3",
+        prompt: "a white siamese cat",
+        n: 1,
+        size: "1024x1024",
+      });
+
+      console.log(response.data[0].url);
+
+      res.json({
+        imageUrl: "dd"
+      })
+
+    } catch (error) {
+      console.log(error)
+      
+    }
+    
+  })
 
 module.exports=router

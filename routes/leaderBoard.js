@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { authenticateToken } = require('../middleware/auth');
+const {authenticateUser} = require('../middleware/auth');
 const User = require("../mongoose/models/User");
+const { getProfileUrl } = require('../controllers/userProfile');
 
 
-router.get('/',  async (req, res, next) => {
+router.get('/',  async (req, res) => {
     try {
         // Fetch all users from the database
         const users = await User.find({}).select('-_id');
@@ -19,13 +20,32 @@ router.get('/',  async (req, res, next) => {
         });
 
         // Get the top 3 users
-        const topUsers = sortedUsers.slice(0, 3);
+        let topUsers = sortedUsers.slice(0, 3);
+        let otherUsers = sortedUsers.slice(3)
+        otherUsers = await Promise.all(
 
-        const otherUsers = sortedUsers.slice(3)
-        // Send leaderboard data
+            otherUsers.map(async (item)=>{
+              item.profilePic= await getProfileUrl(item.telegramId)
+              return item
+               
+                
+            })
+        )
+        
+        topUsers = await Promise.all(
+
+            topUsers.map(async (item)=>{
+              item.profilePic= await getProfileUrl(item.telegramId)
+              return item
+               
+                
+            })
+        )
+        console.log(topUsers)
         res.json({
             topUsers: topUsers,
-            otherUsers: otherUsers
+            otherUsers: otherUsers,
+         
             
         });
     } catch (error) {

@@ -5,10 +5,12 @@ const cors = require('cors');
 require('dotenv').config();
 const userRoutes = require("./routes/user")
 const settingRoutes = require("./routes/settings")
-const leaderboardRoutes = require("./routes/leaderBoard")
+const leaderboardRoutes = require("./routes/leaderBoard");
+const { logger } = require('./middleware/logger');
 const app = express();
 
 // Middleware
+app.use(logger)
 app.use(cors());
 app.use(express.json());
 
