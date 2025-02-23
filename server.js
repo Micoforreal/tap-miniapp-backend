@@ -29,16 +29,16 @@ app.use('/api/leaderboard',leaderboardRoutes)
 
 
 
-bot.start((ctx) =>
-    ctx.reply("Welcome :)))))", {
-      reply_markup: {
-        inline_keyboard: [[{ text: "web app", web_app: { url: web_link } }]],
+// bot.start((ctx) =>
+//     ctx.reply("Welcome :)))))", {
+//       reply_markup: {
+//         inline_keyboard: [[{ text: "web app", web_app: { url: web_link } }]],
         
-    },
-    })
-  );
+//     },
+//     })
+//   );
   
-  bot.launch();
+//   bot.launch();
 
 
 
@@ -46,8 +46,8 @@ bot.start((ctx) =>
 // Connect to MongoDB and start server
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
-    app.listen(process.env.PORT || 10000, () => {
-      console.log(`Server running on port ${process.env.PORT || 3000}`);
+    app.listen(process.env.PORT || 8000, () => {
+      console.log(`Server running on port ${process.env.PORT || 8000}`);
     });
   })
   .catch(console.error);

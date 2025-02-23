@@ -12,8 +12,7 @@ const axios = require("axios");
 const {OpenAI}= require("openai");
 const { getProfileUrl } = require('../controllers/userProfile');
 const openai = new OpenAI({
-  baseURL:'https://api.deepseek.com',
-  apiKey: "sk-79bf9e05c0cd418ea2f4bb93cf35aa36", // Replace with your actual API key
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 
@@ -209,23 +208,27 @@ router.get('/stats', authenticateUser, async (req, res) => {
   });
   
   
+  
 
-  router.get("/generate-image", async (req,res) => {
+  router.post("/generate-image",  async (req,res) => {
     const {prompt}= req.body
    
     try {
       const response = await openai.images.generate({
         model: "dall-e-3",
-        prompt: "a white siamese cat",
+        prompt: prompt,
         n: 1,
         size: "1024x1024",
       });
 
-      console.log(response.data[0].url);
-
-      res.json({
-        imageUrl: "dd"
-      })
+     if(response.data && response.data[0].url) {
+       res.json({
+         imageUrl: response.data[0].url
+       }) 
+      }
+      else {
+        res.status(500).json({ message: 'Server error' });
+      }
 
     } catch (error) {
       console.log(error)
