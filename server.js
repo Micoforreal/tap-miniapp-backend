@@ -29,16 +29,16 @@ app.use('/api/leaderboard',leaderboardRoutes)
 
 
 
-// bot.start((ctx) =>
-//     ctx.reply("Welcome :)))))", {
-//       reply_markup: {
-//         inline_keyboard: [[{ text: "web app", web_app: { url: web_link } }]],
+bot.start((ctx) =>
+    ctx.reply("Welcome :)))))", {
+      reply_markup: {
+        inline_keyboard: [[{ text: "web app", web_app: { url: web_link } }]],
         
-//     },
-//     })
-//   );
+    },
+    })
+  );
   
-//   bot.launch();
+  bot.launch();
 
 
 
