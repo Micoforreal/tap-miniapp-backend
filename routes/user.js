@@ -232,6 +232,7 @@ router.get('/stats', authenticateUser, async (req, res) => {
 
     } catch (error) {
       console.log(error)
+      res.status(500).json({ message: 'Server error' });
       
     }
     
