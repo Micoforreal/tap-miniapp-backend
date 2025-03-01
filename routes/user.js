@@ -249,4 +249,24 @@ router.get('/stats', authenticateUser, async (req, res) => {
     }
   });
 
+
+
+  router.post("/send-user-image", authenticateUser, async (req, res) => {
+    try{
+      const user = req.user;
+      const TELEGRAM_API = `https://api.telegram.org/bot${botToken}/sendPhoto`;
+      await axios.post(TELEGRAM_API, {
+        chat_id: user,
+        photo: req.body.imageUrl,
+        caption: "Click the image to download it.",
+      });
+
+      res.status(200).json({message:"photo Sent"})
+    }catch (error){
+      res.status(400).json({message:"something went wrong"})
+      console.log(error)
+
+    }
+  })
+
 module.exports=router
