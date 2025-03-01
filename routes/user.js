@@ -237,5 +237,16 @@ router.get('/stats', authenticateUser, async (req, res) => {
     }
     
   })
+  router.get("/proxy-image", async (req, res) => {
+    try {
+      const imageUrl = req.query.url; // Image URL from OpenAI
+      const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
+  
+      res.set("Content-Type", "image/png");
+      res.send(response.data);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch image" });
+    }
+  });
 
 module.exports=router
