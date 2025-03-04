@@ -255,17 +255,34 @@ router.get('/stats', authenticateUser, async (req, res) => {
     try{
       const user = req.user;
       const TELEGRAM_API = `https://api.telegram.org/bot${botToken}/sendPhoto`;
-      await axios.post(TELEGRAM_API, {
-        chat_id: user,
+       const response = await axios.post(TELEGRAM_API, {
+        chat_id: user.telegramId,
         photo: req.body.imageUrl,
         caption: "Click the image to download it.",
       });
-
-      res.status(200).json({message:"photo Sent"})
+      res.status(200).json({message:"Photo has been sent to your dm "})
     }catch (error){
       res.status(400).json({message:"something went wrong"})
-      console.log(error)
+     
 
+    }
+  })
+
+
+  router.post("/spin-reward", authenticateUser, async (req, res)=>{
+    try {
+      const user = req.user
+      
+      user.coins += req.body.points;
+
+      await user.save();
+
+      res.status(200).json({message:"Successful"})
+    } catch (error) {
+      console.log("error occured")
+      res.status(401).json({message:"unable to proccess request"})
+      
+      
     }
   })
 
